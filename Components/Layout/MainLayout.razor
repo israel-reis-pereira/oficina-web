@@ -1,16 +1,22 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+    <main class="main-content">
+        <header class="app-header px-4 px-lg-5">
+            <div>
+                <span class="app-header__eyebrow">Oficina Mecânica</span>
+                <span class="app-header__title">Gestão da oficina</span>
+            </div>
 
-        <article class="content px-4">
+            <span class="app-header__context">Área administrativa</span>
+        </header>
+
+        @* O conteúdo das páginas continua sendo renderizado pelo mecanismo padrão de layouts do Blazor. *@
+        <article class="content px-4 px-lg-5">
             @Body
         </article>
     </main>

@@ -1,21 +1,204 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Oficina Mecânica</PageTitle>
+<PageTitle>Dashboard | Oficina</PageTitle>
 
-<div class="container py-5">
+<section class="dashboard-heading mb-4">
+    <h1 class="mb-1">Dashboard</h1>
+    <p class="text-body-secondary mb-0">Visão geral dos atendimentos e das prioridades da oficina.</p>
+</section>
 
-    <section class="text-center">
+<section class="row g-3 mb-4" aria-label="Indicadores da oficina">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <span class="dashboard-card__label">Veículos em atendimento</span>
+                <strong class="dashboard-card__value">@VeiculosEmAtendimento</strong>
+                <span class="dashboard-card__detail">Atendimentos ativos</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <span class="dashboard-card__label">Orçamentos pendentes</span>
+                <strong class="dashboard-card__value">@OrcamentosPendentes</strong>
+                <span class="dashboard-card__detail">Aguardando aprovação</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <span class="dashboard-card__label">Entradas aguardando pagamento</span>
+                <strong class="dashboard-card__value">@EntradasAguardandoPagamento</strong>
+                <span class="dashboard-card__detail">@FormatarMoeda(ValorTotalEntradas) a receber</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <span class="dashboard-card__label">Serviços em execução</span>
+                <strong class="dashboard-card__value">@ServicosEmExecucao</strong>
+                <span class="dashboard-card__detail">Em andamento na oficina</span>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <h1>Oficina Mecânica</h1>
+<section class="card dashboard-panel mb-4">
+    <div class="card-header dashboard-panel__header">
+        <div>
+            <h2 class="h5 mb-1">Veículos em atendimento</h2>
+            <p class="text-body-secondary small mb-0">Acompanhe o estágio atual de cada serviço.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Placa</th>
+                    <th scope="col">Veículo</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var atendimento in Atendimentos)
+                {
+                    <tr>
+                        <td class="fw-semibold">@atendimento.Placa</td>
+                        <td>@atendimento.Veiculo</td>
+                        <td>@atendimento.Cliente</td>
+                        <td><span class="badge @atendimento.ClasseBadge">@atendimento.Status</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
 
-        <p class="lead">
-            Manutenção e serviços automotivos.
-        </p>
+<div class="row g-4">
+    <div class="col-12 col-xl-7">
+        <section class="card dashboard-panel h-100">
+            <div class="card-header dashboard-panel__header">
+                <div>
+                    <h2 class="h5 mb-1">Orçamentos pendentes</h2>
+                    <p class="text-body-secondary small mb-0">Orçamentos que ainda precisam de uma decisão.</p>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Veículo</th>
+                            <th scope="col">Valor</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var orcamento in Orcamentos.Where(orcamento => orcamento.Status == "Aguardando aprovação"))
+                        {
+                            <tr>
+                                <td>@orcamento.Cliente</td>
+                                <td>@orcamento.Veiculo</td>
+                                <td class="fw-semibold">@FormatarMoeda(orcamento.Valor)</td>
+                                <td><span class="badge text-bg-warning">@orcamento.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 
-        <a href="#" class="btn btn-primary">
-            Falar pelo WhatsApp
-        </a>
-
-    </section>
-
+    <div class="col-12 col-xl-5">
+        <section class="card dashboard-panel h-100">
+            <div class="card-header dashboard-panel__header">
+                <div>
+                    <h2 class="h5 mb-1">Entradas aguardando pagamento</h2>
+                    <p class="text-body-secondary small mb-0">50% necessários antes do pedido das peças.</p>
+                </div>
+            </div>
+            <div class="list-group list-group-flush">
+                @foreach (var orcamento in Orcamentos.Where(orcamento => orcamento.Status == "Aguardando entrada"))
+                {
+                    <div class="list-group-item px-4 py-3">
+                        <div class="d-flex justify-content-between gap-3">
+                            <div>
+                                <div class="fw-semibold">@orcamento.Cliente</div>
+                                <small class="text-body-secondary">@orcamento.Veiculo</small>
+                            </div>
+                            <span class="badge text-bg-danger align-self-start">Pendente</span>
+                        </div>
+                        <div class="dashboard-entry-values mt-3">
+                            <span>Orçamento <strong>@FormatarMoeda(orcamento.Valor)</strong></span>
+                            <span>Entrada (50%) <strong>@FormatarMoeda(orcamento.Valor / 2)</strong></span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
 </div>
+
+<section class="mt-4" aria-labelledby="alertas-operacionais">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 id="alertas-operacionais" class="h5 mb-0">Alertas operacionais</h2>
+        <span class="text-body-secondary small">Prioridades do dia</span>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-lg-4">
+            <div class="alert alert-warning h-100 mb-0" role="alert">
+                <strong>Orçamento aguardando aprovação</strong>
+                <div class="small mt-1">Mariana Costa — Chevrolet Onix</div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="alert alert-danger h-100 mb-0" role="alert">
+                <strong>Entrada de 50% aguardando pagamento</strong>
+                <div class="small mt-1">Carlos Mendes — Toyota Corolla</div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="alert alert-info h-100 mb-0" role="alert">
+                <strong>Veículo aguardando peças</strong>
+                <div class="small mt-1">João da Silva — Honda Civic</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    // Dados temporários para validar a interface; serão substituídos por persistência em uma fase futura.
+    private static readonly Atendimento[] Atendimentos =
+    [
+        new("ABC1D23", "Honda Civic 2020", "João da Silva", "Aguardando peças", "text-bg-info"),
+        new("DEF4G56", "Toyota Corolla 2021", "Carlos Mendes", "Aguardando entrada", "text-bg-danger"),
+        new("HIJ7K89", "Volkswagen T-Cross 2022", "Ana Pereira", "Em execução", "text-bg-primary"),
+        new("LMN0P12", "Fiat Toro 2023", "Ricardo Alves", "Em execução", "text-bg-primary")
+    ];
+
+    private static readonly Orcamento[] Orcamentos =
+    [
+        new("Mariana Costa", "Chevrolet Onix 2019", 1850m, "Aguardando aprovação"),
+        new("Felipe Rocha", "Renault Duster 2020", 920m, "Aguardando aprovação"),
+        new("Carlos Mendes", "Toyota Corolla 2021", 2400m, "Aguardando entrada"),
+        new("Patrícia Lima", "Jeep Renegade 2022", 1600m, "Aguardando entrada")
+    ];
+
+    private static int VeiculosEmAtendimento => Atendimentos.Count(atendimento => atendimento.Status != "Entregue");
+    private static int OrcamentosPendentes => Orcamentos.Count(orcamento => orcamento.Status == "Aguardando aprovação");
+    private static int EntradasAguardandoPagamento => Orcamentos.Count(orcamento => orcamento.Status == "Aguardando entrada");
+    private static decimal ValorTotalEntradas => Orcamentos
+        .Where(orcamento => orcamento.Status == "Aguardando entrada")
+        .Sum(orcamento => orcamento.Valor / 2);
+    private static int ServicosEmExecucao => Atendimentos.Count(atendimento => atendimento.Status == "Em execução");
+
+    private static string FormatarMoeda(decimal valor) => valor.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
+
+    private sealed record Atendimento(string Placa, string Veiculo, string Cliente, string Status, string ClasseBadge);
+    private sealed record Orcamento(string Cliente, string Veiculo, decimal Valor, string Status);
+}

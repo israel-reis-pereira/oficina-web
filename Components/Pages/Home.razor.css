@@ -1,0 +1,92 @@
+.dashboard-heading h1 {
+    color: #1f2933;
+    font-size: clamp(1.75rem, 2vw, 2.25rem);
+    font-weight: 700;
+}
+
+.dashboard-card,
+.dashboard-panel {
+    border: 1px solid #e4e8ec;
+    box-shadow: 0 0.125rem 0.25rem rgba(31, 41, 51, 0.04);
+}
+
+.dashboard-card {
+    border-left: 0.25rem solid #e17c32;
+}
+
+.dashboard-card__label,
+.dashboard-card__detail {
+    display: block;
+}
+
+.dashboard-card__label {
+    color: #52606d;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.dashboard-card__value {
+    display: block;
+    margin: 0.5rem 0;
+    color: #1f2933;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.dashboard-card__detail {
+    color: #7b8794;
+    font-size: 0.8rem;
+}
+
+.dashboard-panel {
+    overflow: hidden;
+}
+
+.dashboard-panel__header {
+    padding: 1.25rem 1.5rem;
+    background-color: #fff;
+    border-bottom: 1px solid #e4e8ec;
+}
+
+.dashboard-panel .table {
+    --bs-table-bg: transparent;
+}
+
+.dashboard-panel .table th {
+    padding: 0.875rem 1.5rem;
+    color: #6b7785;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.dashboard-panel .table td {
+    padding: 1rem 1.5rem;
+    color: #334e68;
+}
+
+.dashboard-entry-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    color: #52606d;
+    font-size: 0.8rem;
+}
+
+.dashboard-entry-values strong {
+    color: #1f2933;
+}
+
+@media (max-width: 575.98px) {
+    .dashboard-panel__header {
+        padding: 1rem;
+    }
+
+    .dashboard-panel .table th,
+    .dashboard-panel .table td {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+}
