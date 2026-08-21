@@ -1,4 +1,5 @@
 @page "/"
+@using Oficina.Web.Components
 @using Oficina.Web.Models
 @using Oficina.Web.Services
 @* A página pede resultados prontos ao serviço, sem conhecer os critérios internos de cada consulta. *@
@@ -74,7 +75,7 @@
                         <td class="fw-semibold" data-label="Placa">@veiculo.Placa</td>
                         <td data-label="Veículo">@veiculo.Descricao</td>
                         <td data-label="Cliente">@veiculo.Cliente</td>
-                        <td data-label="Status"><span class="badge @ObterClasseBadge(veiculo.Status)">@ObterDescricaoStatus(veiculo.Status)</span></td>
+                        <td data-label="Status"><span class="badge @StatusServicoApresentacao.ObterClasseBadge(veiculo.Status)">@StatusServicoApresentacao.ObterTexto(veiculo.Status)</span></td>
                     </tr>
                 }
             </tbody>
@@ -108,7 +109,7 @@
                                 <td data-label="Cliente">@veiculo.Cliente</td>
                                 <td data-label="Veículo">@veiculo.Descricao</td>
                                 <td class="fw-semibold" data-label="Valor">@FormatarMoeda(veiculo.ValorOrcamento)</td>
-                                <td data-label="Status"><span class="badge @ObterClasseBadge(veiculo.Status)">@ObterDescricaoStatus(veiculo.Status)</span></td>
+                                <td data-label="Status"><span class="badge @StatusServicoApresentacao.ObterClasseBadge(veiculo.Status)">@StatusServicoApresentacao.ObterTexto(veiculo.Status)</span></td>
                             </tr>
                         }
                     </tbody>
@@ -184,25 +185,4 @@
 
     private static string FormatarMoeda(decimal valor) => valor.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
 
-    private static string ObterDescricaoStatus(StatusServico status) => status switch
-    {
-        StatusServico.CadastroRealizado => "Cadastro realizado",
-        StatusServico.OrcamentoEmAnalise => "Aguardando aprovação",
-        StatusServico.AguardandoEntrada => "Aguardando entrada",
-        StatusServico.PecasSolicitadas => "Aguardando peças",
-        StatusServico.EmExecucao => "Em execução",
-        StatusServico.AguardandoPagamento => "Aguardando pagamento",
-        StatusServico.Finalizado => "Finalizado",
-        _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
-    };
-
-    private static string ObterClasseBadge(StatusServico status) => status switch
-    {
-        StatusServico.OrcamentoEmAnalise => "text-bg-warning",
-        StatusServico.AguardandoEntrada or StatusServico.AguardandoPagamento => "text-bg-danger",
-        StatusServico.PecasSolicitadas => "text-bg-info",
-        StatusServico.EmExecucao => "text-bg-primary",
-        StatusServico.Finalizado => "text-bg-success",
-        _ => "text-bg-secondary"
-    };
 }
