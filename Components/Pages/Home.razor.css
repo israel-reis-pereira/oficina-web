@@ -84,9 +84,55 @@
         padding: 1rem;
     }
 
-    .dashboard-panel .table th,
+    .dashboard-panel .table-responsive {
+        overflow-x: visible;
+    }
+
+    .dashboard-panel .table,
+    .dashboard-panel .table tbody,
+    .dashboard-panel .table tr,
     .dashboard-panel .table td {
-        padding-right: 1rem;
-        padding-left: 1rem;
+        display: block;
+    }
+
+    .dashboard-panel .table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .dashboard-panel .table tr {
+        padding: 1rem;
+        border-bottom: 1px solid #e4e8ec;
+    }
+
+    .dashboard-panel .table tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .dashboard-panel .table td {
+        padding: 0.25rem 0;
+        border: 0;
+    }
+
+    .dashboard-panel .table td::before {
+        display: block;
+        margin-bottom: 0.125rem;
+        color: #6b7785;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        content: attr(data-label);
+    }
+
+    .dashboard-panel .table td:last-child {
+        padding-top: 0.5rem;
     }
 }

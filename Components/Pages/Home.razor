@@ -67,10 +67,10 @@
                 @foreach (var atendimento in Atendimentos)
                 {
                     <tr>
-                        <td class="fw-semibold">@atendimento.Placa</td>
-                        <td>@atendimento.Veiculo</td>
-                        <td>@atendimento.Cliente</td>
-                        <td><span class="badge @atendimento.ClasseBadge">@atendimento.Status</span></td>
+                        <td class="fw-semibold" data-label="Placa">@atendimento.Placa</td>
+                        <td data-label="Veículo">@atendimento.Veiculo</td>
+                        <td data-label="Cliente">@atendimento.Cliente</td>
+                        <td data-label="Status"><span class="badge @atendimento.ClasseBadge">@atendimento.Status</span></td>
                     </tr>
                 }
             </tbody>
@@ -101,10 +101,10 @@
                         @foreach (var orcamento in Orcamentos.Where(orcamento => orcamento.Status == "Aguardando aprovação"))
                         {
                             <tr>
-                                <td>@orcamento.Cliente</td>
-                                <td>@orcamento.Veiculo</td>
-                                <td class="fw-semibold">@FormatarMoeda(orcamento.Valor)</td>
-                                <td><span class="badge text-bg-warning">@orcamento.Status</span></td>
+                                <td data-label="Cliente">@orcamento.Cliente</td>
+                                <td data-label="Veículo">@orcamento.Veiculo</td>
+                                <td class="fw-semibold" data-label="Valor">@FormatarMoeda(orcamento.Valor)</td>
+                                <td data-label="Status"><span class="badge text-bg-warning">@orcamento.Status</span></td>
                             </tr>
                         }
                     </tbody>
