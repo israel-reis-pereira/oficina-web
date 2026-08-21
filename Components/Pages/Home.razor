@@ -1,4 +1,8 @@
 @page "/"
+@using Oficina.Web.Models
+@using Oficina.Web.Services
+@* A página pede resultados prontos ao serviço, sem conhecer os critérios internos de cada consulta. *@
+@inject OficinaService OficinaService
 
 <PageTitle>Dashboard | Oficina</PageTitle>
 
@@ -12,7 +16,7 @@
         <div class="card dashboard-card h-100">
             <div class="card-body">
                 <span class="dashboard-card__label">Veículos em atendimento</span>
-                <strong class="dashboard-card__value">@VeiculosEmAtendimento</strong>
+                <strong class="dashboard-card__value">@VeiculosEmAtendimento.Count</strong>
                 <span class="dashboard-card__detail">Atendimentos ativos</span>
             </div>
         </div>
@@ -21,7 +25,7 @@
         <div class="card dashboard-card h-100">
             <div class="card-body">
                 <span class="dashboard-card__label">Orçamentos pendentes</span>
-                <strong class="dashboard-card__value">@OrcamentosPendentes</strong>
+                <strong class="dashboard-card__value">@OrcamentosPendentes.Count</strong>
                 <span class="dashboard-card__detail">Aguardando aprovação</span>
             </div>
         </div>
@@ -30,7 +34,7 @@
         <div class="card dashboard-card h-100">
             <div class="card-body">
                 <span class="dashboard-card__label">Entradas aguardando pagamento</span>
-                <strong class="dashboard-card__value">@EntradasAguardandoPagamento</strong>
+                <strong class="dashboard-card__value">@EntradasAguardandoPagamento.Count</strong>
                 <span class="dashboard-card__detail">@FormatarMoeda(ValorTotalEntradas) a receber</span>
             </div>
         </div>
@@ -39,7 +43,7 @@
         <div class="card dashboard-card h-100">
             <div class="card-body">
                 <span class="dashboard-card__label">Serviços em execução</span>
-                <strong class="dashboard-card__value">@ServicosEmExecucao</strong>
+                <strong class="dashboard-card__value">@ServicosEmExecucao.Count</strong>
                 <span class="dashboard-card__detail">Em andamento na oficina</span>
             </div>
         </div>
@@ -64,13 +68,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var atendimento in Atendimentos)
+                @foreach (var veiculo in VeiculosEmAtendimento)
                 {
                     <tr>
-                        <td class="fw-semibold" data-label="Placa">@atendimento.Placa</td>
-                        <td data-label="Veículo">@atendimento.Veiculo</td>
-                        <td data-label="Cliente">@atendimento.Cliente</td>
-                        <td data-label="Status"><span class="badge @atendimento.ClasseBadge">@atendimento.Status</span></td>
+                        <td class="fw-semibold" data-label="Placa">@veiculo.Placa</td>
+                        <td data-label="Veículo">@veiculo.Descricao</td>
+                        <td data-label="Cliente">@veiculo.Cliente</td>
+                        <td data-label="Status"><span class="badge @ObterClasseBadge(veiculo.Status)">@ObterDescricaoStatus(veiculo.Status)</span></td>
                     </tr>
                 }
             </tbody>
@@ -98,13 +102,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var orcamento in Orcamentos.Where(orcamento => orcamento.Status == "Aguardando aprovação"))
+                        @foreach (var veiculo in OrcamentosPendentes)
                         {
                             <tr>
-                                <td data-label="Cliente">@orcamento.Cliente</td>
-                                <td data-label="Veículo">@orcamento.Veiculo</td>
-                                <td class="fw-semibold" data-label="Valor">@FormatarMoeda(orcamento.Valor)</td>
-                                <td data-label="Status"><span class="badge text-bg-warning">@orcamento.Status</span></td>
+                                <td data-label="Cliente">@veiculo.Cliente</td>
+                                <td data-label="Veículo">@veiculo.Descricao</td>
+                                <td class="fw-semibold" data-label="Valor">@FormatarMoeda(veiculo.ValorOrcamento)</td>
+                                <td data-label="Status"><span class="badge @ObterClasseBadge(veiculo.Status)">@ObterDescricaoStatus(veiculo.Status)</span></td>
                             </tr>
                         }
                     </tbody>
@@ -122,19 +126,19 @@
                 </div>
             </div>
             <div class="list-group list-group-flush">
-                @foreach (var orcamento in Orcamentos.Where(orcamento => orcamento.Status == "Aguardando entrada"))
+                @foreach (var veiculo in EntradasAguardandoPagamento)
                 {
                     <div class="list-group-item px-4 py-3">
                         <div class="d-flex justify-content-between gap-3">
                             <div>
-                                <div class="fw-semibold">@orcamento.Cliente</div>
-                                <small class="text-body-secondary">@orcamento.Veiculo</small>
+                                <div class="fw-semibold">@veiculo.Cliente</div>
+                                <small class="text-body-secondary">@veiculo.Descricao</small>
                             </div>
                             <span class="badge text-bg-danger align-self-start">Pendente</span>
                         </div>
                         <div class="dashboard-entry-values mt-3">
-                            <span>Orçamento <strong>@FormatarMoeda(orcamento.Valor)</strong></span>
-                            <span>Entrada (50%) <strong>@FormatarMoeda(orcamento.Valor / 2)</strong></span>
+                            <span>Orçamento <strong>@FormatarMoeda(veiculo.ValorOrcamento)</strong></span>
+                            <span>Entrada (50%) <strong>@FormatarMoeda(veiculo.ValorOrcamento / 2)</strong></span>
                         </div>
                     </div>
                 }
@@ -172,33 +176,33 @@
 </section>
 
 @code {
-    // Dados temporários para validar a interface; serão substituídos por persistência em uma fase futura.
-    private static readonly Atendimento[] Atendimentos =
-    [
-        new("ABC1D23", "Honda Civic 2020", "João da Silva", "Aguardando peças", "text-bg-info"),
-        new("DEF4G56", "Toyota Corolla 2021", "Carlos Mendes", "Aguardando entrada", "text-bg-danger"),
-        new("HIJ7K89", "Volkswagen T-Cross 2022", "Ana Pereira", "Em execução", "text-bg-primary"),
-        new("LMN0P12", "Fiat Toro 2023", "Ricardo Alves", "Em execução", "text-bg-primary")
-    ];
-
-    private static readonly Orcamento[] Orcamentos =
-    [
-        new("Mariana Costa", "Chevrolet Onix 2019", 1850m, "Aguardando aprovação"),
-        new("Felipe Rocha", "Renault Duster 2020", 920m, "Aguardando aprovação"),
-        new("Carlos Mendes", "Toyota Corolla 2021", 2400m, "Aguardando entrada"),
-        new("Patrícia Lima", "Jeep Renegade 2022", 1600m, "Aguardando entrada")
-    ];
-
-    private static int VeiculosEmAtendimento => Atendimentos.Count(atendimento => atendimento.Status != "Entregue");
-    private static int OrcamentosPendentes => Orcamentos.Count(orcamento => orcamento.Status == "Aguardando aprovação");
-    private static int EntradasAguardandoPagamento => Orcamentos.Count(orcamento => orcamento.Status == "Aguardando entrada");
-    private static decimal ValorTotalEntradas => Orcamentos
-        .Where(orcamento => orcamento.Status == "Aguardando entrada")
-        .Sum(orcamento => orcamento.Valor / 2);
-    private static int ServicosEmExecucao => Atendimentos.Count(atendimento => atendimento.Status == "Em execução");
+    private IReadOnlyList<Veiculo> VeiculosEmAtendimento => OficinaService.ObterVeiculosEmAtendimento();
+    private IReadOnlyList<Veiculo> OrcamentosPendentes => OficinaService.ObterOrcamentosPendentes();
+    private IReadOnlyList<Veiculo> EntradasAguardandoPagamento => OficinaService.ObterEntradasAguardandoPagamento();
+    private IReadOnlyList<Veiculo> ServicosEmExecucao => OficinaService.ObterServicosEmExecucao();
+    private decimal ValorTotalEntradas => OficinaService.ObterValorTotalEntradas();
 
     private static string FormatarMoeda(decimal valor) => valor.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
 
-    private sealed record Atendimento(string Placa, string Veiculo, string Cliente, string Status, string ClasseBadge);
-    private sealed record Orcamento(string Cliente, string Veiculo, decimal Valor, string Status);
+    private static string ObterDescricaoStatus(StatusServico status) => status switch
+    {
+        StatusServico.CadastroRealizado => "Cadastro realizado",
+        StatusServico.OrcamentoEmAnalise => "Aguardando aprovação",
+        StatusServico.AguardandoEntrada => "Aguardando entrada",
+        StatusServico.PecasSolicitadas => "Aguardando peças",
+        StatusServico.EmExecucao => "Em execução",
+        StatusServico.AguardandoPagamento => "Aguardando pagamento",
+        StatusServico.Finalizado => "Finalizado",
+        _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
+    };
+
+    private static string ObterClasseBadge(StatusServico status) => status switch
+    {
+        StatusServico.OrcamentoEmAnalise => "text-bg-warning",
+        StatusServico.AguardandoEntrada or StatusServico.AguardandoPagamento => "text-bg-danger",
+        StatusServico.PecasSolicitadas => "text-bg-info",
+        StatusServico.EmExecucao => "text-bg-primary",
+        StatusServico.Finalizado => "text-bg-success",
+        _ => "text-bg-secondary"
+    };
 }
