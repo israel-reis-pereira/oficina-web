@@ -158,19 +158,22 @@
         <div class="col-12 col-lg-4">
             <div class="alert alert-warning h-100 mb-0" role="alert">
                 <strong>Orçamento aguardando aprovação</strong>
-                <div class="small mt-1">Mariana Costa — Chevrolet Onix</div>
+                @foreach (var veiculo in OrcamentosPendentes)
+                {   <div class="small mt-1">@veiculo.Cliente — @veiculo.Descricao</div>    }
             </div>
         </div>
         <div class="col-12 col-lg-4">
             <div class="alert alert-danger h-100 mb-0" role="alert">
                 <strong>Entrada de 50% aguardando pagamento</strong>
-                <div class="small mt-1">Carlos Mendes — Toyota Corolla</div>
+                @foreach (var veiculo in EntradasAguardandoPagamento)
+                {   <div class="small mt-1">@veiculo.Cliente — @veiculo.Descricao</div>    }
             </div>
         </div>
         <div class="col-12 col-lg-4">
             <div class="alert alert-info h-100 mb-0" role="alert">
                 <strong>Veículo aguardando peças</strong>
-                <div class="small mt-1">João da Silva — Honda Civic</div>
+                @foreach (var veiculo in VeiculosAguardandoPecas)
+                {   <div class="small mt-1">@veiculo.Cliente — @veiculo.Descricao</div>    }
             </div>
         </div>
     </div>
@@ -180,6 +183,7 @@
     private IReadOnlyList<Veiculo> VeiculosEmAtendimento => OficinaService.ObterVeiculosEmAtendimento();
     private IReadOnlyList<Veiculo> OrcamentosPendentes => OficinaService.ObterOrcamentosPendentes();
     private IReadOnlyList<Veiculo> EntradasAguardandoPagamento => OficinaService.ObterEntradasAguardandoPagamento();
+    private IReadOnlyList<Veiculo> VeiculosAguardandoPecas => OficinaService.ObterVeiculosAguardandoPecas();
     private IReadOnlyList<Veiculo> ServicosEmExecucao => OficinaService.ObterServicosEmExecucao();
     private decimal ValorTotalEntradas => OficinaService.ObterValorTotalEntradas();
 

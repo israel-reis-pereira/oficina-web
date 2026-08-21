@@ -79,6 +79,11 @@ public sealed class OficinaService
         .Where(veiculo => veiculo.Status == StatusServico.AguardandoEntrada)
         .ToArray();
 
+    // O alerta reutiliza esta consulta para que a página não replique o critério operacional de peças.
+    public IReadOnlyList<Veiculo> ObterVeiculosAguardandoPecas() => Veiculos
+        .Where(veiculo => veiculo.Status == StatusServico.PecasSolicitadas)
+        .ToArray();
+
     public IReadOnlyList<Veiculo> ObterServicosEmExecucao() => Veiculos
         .Where(veiculo => veiculo.Status == StatusServico.EmExecucao)
         .ToArray();
