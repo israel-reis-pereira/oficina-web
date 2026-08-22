@@ -1,4 +1,5 @@
 @page "/"
+@rendermode InteractiveServer
 @using Oficina.Web.Components
 @using Oficina.Web.Models
 @using Oficina.Web.Services
@@ -53,9 +54,22 @@
 
 <section class="card dashboard-panel mb-4">
     <div class="card-header dashboard-panel__header">
-        <div>
-            <h2 class="h5 mb-1">Veículos em atendimento</h2>
-            <p class="text-body-secondary small mb-0">Acompanhe o estágio atual de cada serviço.</p>
+        <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between gap-3">
+            <div>
+                <h2 class="h5 mb-1">Veículos em atendimento</h2>
+                <p class="text-body-secondary small mb-0">Acompanhe o estágio atual de cada serviço.</p>
+            </div>
+            <div class="dashboard-status-filter">
+                <label class="form-label small mb-1" for="filtro-status">Status</label>
+                <select id="filtro-status" class="form-select form-select-sm" @bind="FiltroStatus">
+                    <option value="">Todos os status</option>
+                    @* Os rótulos são obtidos do helper de apresentação para manter o enum livre de textos de interface. *@
+                    @foreach (var status in Enum.GetValues<StatusServico>())
+                    {
+                        <option value="@status">@StatusServicoApresentacao.ObterTexto(status)</option>
+                    }
+                </select>
+            </div>
         </div>
     </div>
     <div class="table-responsive">
@@ -69,7 +83,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var veiculo in VeiculosEmAtendimento)
+                @foreach (var veiculo in VeiculosEmAtendimentoFiltrados)
                 {
                     <tr>
                         <td class="fw-semibold" data-label="Placa">@veiculo.Placa</td>
@@ -181,6 +195,9 @@
 
 @code {
     private IReadOnlyList<Veiculo> VeiculosEmAtendimento => OficinaService.ObterVeiculosEmAtendimento();
+    // O estado do filtro pertence ao componente porque representa a seleção atual do usuário nesta tela.
+    private StatusServico? FiltroStatus { get; set; }
+    private IReadOnlyList<Veiculo> VeiculosEmAtendimentoFiltrados => OficinaService.ObterVeiculosEmAtendimento(FiltroStatus);
     private IReadOnlyList<Veiculo> OrcamentosPendentes => OficinaService.ObterOrcamentosPendentes();
     private IReadOnlyList<Veiculo> EntradasAguardandoPagamento => OficinaService.ObterEntradasAguardandoPagamento();
     private IReadOnlyList<Veiculo> VeiculosAguardandoPecas => OficinaService.ObterVeiculosAguardandoPecas();

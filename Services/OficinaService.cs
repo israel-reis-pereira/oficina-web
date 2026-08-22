@@ -65,9 +65,11 @@ public sealed class OficinaService
         }
     ]);
 
-    // O serviço centraliza os critérios de estado; a apresentação pede resultados sem conhecer esses filtros internos.
-    public IReadOnlyList<Veiculo> ObterVeiculosEmAtendimento() => Veiculos
-        .Where(veiculo => veiculo.Status != StatusServico.Finalizado)
+    // A filtragem operacional fica no serviço para que a página apenas apresente a coleção recebida.
+    public IReadOnlyList<Veiculo> ObterVeiculosEmAtendimento(StatusServico? filtroStatus = null) => Veiculos
+        .Where(veiculo => filtroStatus.HasValue
+            ? veiculo.Status == filtroStatus.Value
+            : veiculo.Status != StatusServico.Finalizado)
         .ToArray();
 
     // Esta consulta representa os atendimentos que ainda dependem da aprovação do orçamento.

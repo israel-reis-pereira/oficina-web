@@ -48,6 +48,10 @@
     border-bottom: 1px solid #e4e8ec;
 }
 
+.dashboard-status-filter {
+    width: min(100%, 15rem);
+}
+
 .dashboard-panel .table {
     --bs-table-bg: transparent;
 }

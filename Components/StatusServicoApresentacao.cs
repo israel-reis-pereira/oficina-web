@@ -9,10 +9,10 @@ public static class StatusServicoApresentacao
     {
         StatusServico.CadastroRealizado => "Cadastro realizado",
         StatusServico.OrcamentoEmAnalise => "Aguardando aprovação",
-        StatusServico.AguardandoEntrada => "Aguardando entrada",
+        StatusServico.AguardandoEntrada => "Aguardando entrada (50%)",
         StatusServico.PecasSolicitadas => "Aguardando peças",
         StatusServico.EmExecucao => "Em execução",
-        StatusServico.AguardandoPagamento => "Aguardando pagamento",
+        StatusServico.AguardandoPagamento => "Aguardando pagamento final",
         StatusServico.Finalizado => "Finalizado",
         _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
     };
