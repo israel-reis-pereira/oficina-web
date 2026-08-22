@@ -1,0 +1,111 @@
+@page "/configuracoes"
+
+<PageTitle>Configurações | Oficina</PageTitle>
+
+<section class="configuracoes-heading mb-4">
+    <h1 class="mb-1">Configurações</h1>
+    <p class="text-body-secondary mb-0">Reúna as configurações gerais da oficina em um único lugar.</p>
+</section>
+
+<section class="card configuracoes-panel mb-4" aria-labelledby="dados-oficina">
+    <div class="card-header configuracoes-panel__header">
+        <div>
+            <h2 id="dados-oficina" class="h5 mb-1">Dados da oficina</h2>
+            <p class="text-body-secondary small mb-0">Informações exibidas nos atendimentos e documentos da oficina.</p>
+        </div>
+    </div>
+    <div class="card-body configuracoes-panel__body">
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="nome-oficina">Nome da oficina</label>
+                <input id="nome-oficina" class="form-control" value="Oficina Mecânica" disabled />
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="cnpj-oficina">CNPJ</label>
+                <input id="cnpj-oficina" class="form-control" value="12.345.678/0001-90" disabled />
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="telefone-oficina">Telefone</label>
+                <input id="telefone-oficina" class="form-control" value="(17) 3333-1234" disabled />
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="email-oficina">E-mail</label>
+                <input id="email-oficina" class="form-control" value="contato@oficinamecanica.com.br" disabled />
+            </div>
+            <div class="col-12">
+                <label class="form-label small mb-1" for="endereco-oficina">Endereço</label>
+                <input id="endereco-oficina" class="form-control" value="Rua das Oficinas, 100 - Centro" disabled />
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card configuracoes-panel mb-4" aria-labelledby="preferencias-oficina">
+    <div class="card-header configuracoes-panel__header">
+        <div>
+            <h2 id="preferencias-oficina" class="h5 mb-1">Preferências</h2>
+            <p class="text-body-secondary small mb-0">Parâmetros gerais usados na rotina de atendimento.</p>
+        </div>
+    </div>
+    <div class="card-body configuracoes-panel__body">
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="horario-funcionamento">Horário de funcionamento</label>
+                <input id="horario-funcionamento" class="form-control" value="Segunda a sexta, das 8h às 18h" disabled />
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="prazo-orcamento">Prazo padrão para orçamento</label>
+                <select id="prazo-orcamento" class="form-select" disabled>
+                    <option>3 dias úteis</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="forma-pagamento">Forma de pagamento padrão</label>
+                <select id="forma-pagamento" class="form-select" disabled>
+                    <option>Pix</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="preferencia-atendimento">Preferência de atendimento</label>
+                <select id="preferencia-atendimento" class="form-select" disabled>
+                    <option>Exibir atendimentos por status</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card configuracoes-panel" aria-labelledby="configuracoes-atendimento">
+    <div class="card-header configuracoes-panel__header">
+        <div>
+            <h2 id="configuracoes-atendimento" class="h5 mb-1">Configurações do atendimento</h2>
+            <p class="text-body-secondary small mb-0">Preferências visuais relacionadas às ordens de serviço.</p>
+        </div>
+    </div>
+    <div class="card-body configuracoes-panel__body">
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="ordem-padrao-os">Ordenação padrão das OS</label>
+                <select id="ordem-padrao-os" class="form-select" disabled>
+                    <option>Mais recentes primeiro</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label small mb-1" for="destaque-pendencias">Destaque de pendências</label>
+                <select id="destaque-pendencias" class="form-select" disabled>
+                    <option>Exibir no painel operacional</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="configuracoes-actions d-flex flex-column flex-sm-row gap-2 mt-4">
+    <button type="button" class="btn btn-primary" disabled>Salvar alterações</button>
+    <button type="button" class="btn btn-outline-secondary" disabled>Restaurar padrões</button>
+</div>
+
+<section class="alert alert-info configuracoes-empty-state mt-4" role="status" hidden>
+    <strong>Nenhuma configuração disponível.</strong>
+    <div class="small mt-1">As configurações da oficina aparecerão aqui quando forem definidas.</div>
+</section>

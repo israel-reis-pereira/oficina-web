@@ -1,0 +1,42 @@
+.configuracoes-heading h1 {
+    color: #1f2933;
+    font-size: clamp(1.75rem, 2vw, 2.25rem);
+    font-weight: 700;
+}
+
+.configuracoes-panel {
+    overflow: hidden;
+    border: 1px solid #e4e8ec;
+    box-shadow: 0 0.125rem 0.25rem rgba(31, 41, 51, 0.04);
+}
+
+.configuracoes-panel__header {
+    padding: 1.25rem 1.5rem;
+    background-color: #fff;
+    border-bottom: 1px solid #e4e8ec;
+}
+
+.configuracoes-panel__body {
+    padding: 1.25rem 1.5rem;
+}
+
+.configuracoes-actions .btn {
+    width: 100%;
+}
+
+.configuracoes-empty-state {
+    margin-bottom: 0;
+}
+
+@media (min-width: 576px) {
+    .configuracoes-actions .btn {
+        width: auto;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .configuracoes-panel__header,
+    .configuracoes-panel__body {
+        padding: 1rem;
+    }
+}
