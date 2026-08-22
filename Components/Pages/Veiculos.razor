@@ -1,0 +1,68 @@
+@page "/veiculos"
+@using Oficina.Web.Models
+
+<PageTitle>Veículos | Oficina</PageTitle>
+
+<section class="veiculos-heading d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Veículos</h1>
+        <p class="text-body-secondary mb-0">Consulte os veículos cadastrados e seus atendimentos atuais.</p>
+    </div>
+    <button type="button" class="btn btn-primary veiculos-primary-action" disabled>+ Novo Veículo</button>
+</section>
+
+<section class="card veiculos-toolbar mb-4" aria-label="Pesquisa de veículos">
+    <div class="card-body">
+        <label class="form-label small mb-1" for="pesquisa-veiculos">Pesquisar veículos</label>
+        <input id="pesquisa-veiculos" class="form-control veiculos-search" type="search" placeholder="Pesquisar por placa, veículo ou cliente..." disabled />
+    </div>
+</section>
+
+<section class="card veiculos-panel" aria-labelledby="veiculos-cadastrados">
+    <div class="card-header veiculos-panel__header">
+        <div>
+            <h2 id="veiculos-cadastrados" class="h5 mb-1">Veículos cadastrados</h2>
+            <p class="text-body-secondary small mb-0">Acompanhe os veículos e o estágio atual de seus atendimentos.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Placa</th>
+                    <th scope="col">Veículo</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var veiculo in VeiculosDemonstracao)
+                {
+                    <tr>
+                        <td class="fw-semibold" data-label="Placa">@veiculo.Placa</td>
+                        <td data-label="Veículo">@veiculo.Descricao</td>
+                        <td data-label="Cliente">@veiculo.Cliente</td>
+                        <td data-label="Status"><span class="badge @StatusServicoApresentacao.ObterClasseBadge(veiculo.Status)">@StatusServicoApresentacao.ObterTexto(veiculo.Status)</span></td>
+                        <td data-label="Ações"><button type="button" class="btn btn-outline-secondary btn-sm" disabled>Ver</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="alert alert-info veiculos-empty-state mt-4" role="status" hidden>
+    <strong>Nenhum veículo cadastrado.</strong>
+    <div class="small mt-1">Cadastre o primeiro veículo para começar.</div>
+</section>
+
+@code {
+    // Dados estáticos usados apenas para validar o wireframe da página nesta fase.
+    private static readonly (string Placa, string Descricao, string Cliente, StatusServico Status)[] VeiculosDemonstracao =
+    [
+        ("ABC1D23", "Honda Civic 2020", "João da Silva", StatusServico.PecasSolicitadas),
+        ("DEF4G56", "Toyota Corolla 2021", "Maria Oliveira", StatusServico.AguardandoEntrada),
+        ("HIJ7K89", "Volkswagen T-Cross 2022", "Carlos Souza", StatusServico.EmExecucao)
+    ];
+}

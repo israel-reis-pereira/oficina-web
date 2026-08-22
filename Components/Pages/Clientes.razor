@@ -1,0 +1,65 @@
+@page "/clientes"
+
+<PageTitle>Clientes | Oficina</PageTitle>
+
+<section class="clientes-heading d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Clientes</h1>
+        <p class="text-body-secondary mb-0">Gerencie os proprietários e consulte seus veículos associados.</p>
+    </div>
+    <button type="button" class="btn btn-primary clientes-primary-action" disabled>+ Novo Cliente</button>
+</section>
+
+<section class="card clientes-toolbar mb-4" aria-label="Pesquisa de clientes">
+    <div class="card-body">
+        <label class="form-label small mb-1" for="pesquisa-clientes">Pesquisar clientes</label>
+        <input id="pesquisa-clientes" class="form-control clientes-search" type="search" placeholder="Pesquisar por nome ou telefone..." disabled />
+    </div>
+</section>
+
+<section class="card clientes-panel" aria-labelledby="clientes-cadastrados">
+    <div class="card-header clientes-panel__header">
+        <div>
+            <h2 id="clientes-cadastrados" class="h5 mb-1">Clientes cadastrados</h2>
+            <p class="text-body-secondary small mb-0">Consulte os proprietários e a quantidade de veículos associados.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Contato</th>
+                    <th scope="col">Veículos</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cliente in ClientesDemonstracao)
+                {
+                    <tr>
+                        <td class="fw-semibold" data-label="Cliente">@cliente.Nome</td>
+                        <td data-label="Contato">@cliente.Contato</td>
+                        <td data-label="Veículos">@cliente.QuantidadeVeiculos</td>
+                        <td data-label="Ações"><button type="button" class="btn btn-outline-secondary btn-sm" disabled>Ver</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="alert alert-info clientes-empty-state mt-4" role="status" hidden>
+    <strong>Nenhum cliente cadastrado.</strong>
+    <div class="small mt-1">Cadastre o primeiro cliente para começar.</div>
+</section>
+
+@code {
+    // Dados estáticos usados apenas para validar o wireframe da página nesta fase.
+    private static readonly (string Nome, string Contato, int QuantidadeVeiculos)[] ClientesDemonstracao =
+    [
+        ("João da Silva", "(17) 99999-1234", 2),
+        ("Maria Oliveira", "(17) 98888-5678", 1),
+        ("Carlos Souza", "(17) 97777-9012", 0)
+    ];
+}
