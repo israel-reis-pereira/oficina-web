@@ -1,0 +1,111 @@
+.ordens-servico-heading h1 {
+    color: #1f2933;
+    font-size: clamp(1.75rem, 2vw, 2.25rem);
+    font-weight: 700;
+}
+
+.ordens-servico-toolbar,
+.ordens-servico-panel {
+    border: 1px solid #e4e8ec;
+    box-shadow: 0 0.125rem 0.25rem rgba(31, 41, 51, 0.04);
+}
+
+.ordens-servico-toolbar .card-body {
+    padding: 1rem 1.5rem;
+}
+
+.ordens-servico-panel {
+    overflow: hidden;
+}
+
+.ordens-servico-panel__header {
+    padding: 1.25rem 1.5rem;
+    background-color: #fff;
+    border-bottom: 1px solid #e4e8ec;
+}
+
+.ordens-servico-panel .table {
+    --bs-table-bg: transparent;
+}
+
+.ordens-servico-panel .table th {
+    padding: 0.875rem 1.5rem;
+    color: #6b7785;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.ordens-servico-panel .table td {
+    padding: 1rem 1.5rem;
+    color: #334e68;
+}
+
+.ordens-servico-empty-state {
+    margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+    .ordens-servico-primary-action {
+        width: 100%;
+    }
+
+    .ordens-servico-toolbar .card-body,
+    .ordens-servico-panel__header {
+        padding: 1rem;
+    }
+
+    .ordens-servico-panel .table-responsive {
+        overflow-x: visible;
+    }
+
+    .ordens-servico-panel .table,
+    .ordens-servico-panel .table tbody,
+    .ordens-servico-panel .table tr,
+    .ordens-servico-panel .table td {
+        display: block;
+    }
+
+    .ordens-servico-panel .table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .ordens-servico-panel .table tr {
+        padding: 1rem;
+        border-bottom: 1px solid #e4e8ec;
+    }
+
+    .ordens-servico-panel .table tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .ordens-servico-panel .table td {
+        padding: 0.25rem 0;
+        border: 0;
+    }
+
+    .ordens-servico-panel .table td::before {
+        display: block;
+        margin-bottom: 0.125rem;
+        color: #6b7785;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        content: attr(data-label);
+    }
+
+    .ordens-servico-panel .table td:last-child {
+        padding-top: 0.5rem;
+    }
+}

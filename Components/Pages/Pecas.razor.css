@@ -1,0 +1,111 @@
+.pecas-heading h1 {
+    color: #1f2933;
+    font-size: clamp(1.75rem, 2vw, 2.25rem);
+    font-weight: 700;
+}
+
+.pecas-toolbar,
+.pecas-panel {
+    border: 1px solid #e4e8ec;
+    box-shadow: 0 0.125rem 0.25rem rgba(31, 41, 51, 0.04);
+}
+
+.pecas-toolbar .card-body {
+    padding: 1rem 1.5rem;
+}
+
+.pecas-panel {
+    overflow: hidden;
+}
+
+.pecas-panel__header {
+    padding: 1.25rem 1.5rem;
+    background-color: #fff;
+    border-bottom: 1px solid #e4e8ec;
+}
+
+.pecas-panel .table {
+    --bs-table-bg: transparent;
+}
+
+.pecas-panel .table th {
+    padding: 0.875rem 1.5rem;
+    color: #6b7785;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.pecas-panel .table td {
+    padding: 1rem 1.5rem;
+    color: #334e68;
+}
+
+.pecas-empty-state {
+    margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+    .pecas-primary-action {
+        width: 100%;
+    }
+
+    .pecas-toolbar .card-body,
+    .pecas-panel__header {
+        padding: 1rem;
+    }
+
+    .pecas-panel .table-responsive {
+        overflow-x: visible;
+    }
+
+    .pecas-panel .table,
+    .pecas-panel .table tbody,
+    .pecas-panel .table tr,
+    .pecas-panel .table td {
+        display: block;
+    }
+
+    .pecas-panel .table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .pecas-panel .table tr {
+        padding: 1rem;
+        border-bottom: 1px solid #e4e8ec;
+    }
+
+    .pecas-panel .table tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .pecas-panel .table td {
+        padding: 0.25rem 0;
+        border: 0;
+    }
+
+    .pecas-panel .table td::before {
+        display: block;
+        margin-bottom: 0.125rem;
+        color: #6b7785;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        content: attr(data-label);
+    }
+
+    .pecas-panel .table td:last-child {
+        padding-top: 0.5rem;
+    }
+}

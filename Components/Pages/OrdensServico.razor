@@ -1,0 +1,92 @@
+@page "/ordens-servico"
+@using Oficina.Web.Models
+
+<PageTitle>Ordens de Serviço | Oficina</PageTitle>
+
+<section class="ordens-servico-heading d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Ordens de Serviço</h1>
+        <p class="text-body-secondary mb-0">Acompanhe os serviços em execução na oficina.</p>
+    </div>
+    <button type="button" class="btn btn-primary ordens-servico-primary-action" disabled>+ Nova OS</button>
+</section>
+
+<section class="card ordens-servico-toolbar mb-4" aria-label="Pesquisa e filtro de ordens de serviço">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-12 col-md-7">
+                <label class="form-label small mb-1" for="pesquisa-ordens-servico">Pesquisar ordens de serviço</label>
+                <input id="pesquisa-ordens-servico" class="form-control" type="search" placeholder="Pesquisar por OS, placa ou cliente..." disabled />
+            </div>
+            <div class="col-12 col-md-5">
+                <label class="form-label small mb-1" for="filtro-status-os">Status</label>
+                <select id="filtro-status-os" class="form-select form-select-sm" disabled>
+                    <option>Todos os status</option>
+                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.PecasSolicitadas)</option>
+                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.EmExecucao)</option>
+                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.AguardandoPagamento)</option>
+                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.Finalizado)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card ordens-servico-panel" aria-labelledby="ordens-servico-acompanhamento">
+    <div class="card-header ordens-servico-panel__header">
+        <div>
+            <h2 id="ordens-servico-acompanhamento" class="h5 mb-1">Ordens em acompanhamento</h2>
+            <p class="text-body-secondary small mb-0">Visualize responsáveis, valores e o estágio técnico de cada serviço.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">OS</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Veículo</th>
+                    <th scope="col">Responsável</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ordem in OrdensServicoDemonstracao)
+                {
+                    <tr>
+                        <td class="fw-semibold" data-label="OS">@ordem.Identificacao</td>
+                        <td data-label="Cliente">@ordem.Cliente</td>
+                        <td data-label="Veículo">@ordem.Veiculo</td>
+                        <td data-label="Responsável">@ordem.Responsavel</td>
+                        <td data-label="Status"><span class="badge @StatusServicoApresentacao.ObterClasseBadge(ordem.Status)">@StatusServicoApresentacao.ObterTexto(ordem.Status)</span></td>
+                        <td class="fw-semibold" data-label="Total">@ordem.Total</td>
+                        <td data-label="Ações">
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Ver</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Atualizar</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Concluir</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="alert alert-info ordens-servico-empty-state mt-4" role="status" hidden>
+    <strong>Nenhuma OS em execução no momento.</strong>
+    <div class="small mt-1">Novas ordens de serviço aparecerão aqui quando houver atendimentos em andamento.</div>
+</section>
+
+@code {
+    // Dados estáticos usados apenas para validar o wireframe da página nesta fase.
+    private static readonly (string Identificacao, string Cliente, string Veiculo, string Responsavel, StatusServico Status, string Total)[] OrdensServicoDemonstracao =
+    [
+        ("OS-001", "João da Silva", "Honda Civic 2020", "Carlos", StatusServico.EmExecucao, "R$ 1.850,00"),
+        ("OS-002", "Maria Oliveira", "Toyota Corolla 2021", "Rafael", StatusServico.AguardandoEntrada, "R$ 2.400,00"),
+        ("OS-003", "Carlos Souza", "Volkswagen T-Cross 2022", "Marcos", StatusServico.Finalizado, "R$ 920,00")
+    ];
+}

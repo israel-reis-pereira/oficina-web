@@ -1,0 +1,86 @@
+@page "/pecas"
+
+<PageTitle>Peças | Oficina</PageTitle>
+
+<section class="pecas-heading d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Peças</h1>
+        <p class="text-body-secondary mb-0">Consulte e acompanhe as peças utilizadas ou aguardando entrega na oficina.</p>
+    </div>
+    <button type="button" class="btn btn-primary pecas-primary-action" disabled>+ Nova Peça</button>
+</section>
+
+<section class="card pecas-toolbar mb-4" aria-label="Pesquisa e filtro de peças">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-12 col-md-7">
+                <label class="form-label small mb-1" for="pesquisa-pecas">Pesquisar peças</label>
+                <input id="pesquisa-pecas" class="form-control" type="search" placeholder="Pesquisar por peça, OS ou veículo..." disabled />
+            </div>
+            <div class="col-12 col-md-5">
+                <label class="form-label small mb-1" for="filtro-situacao-peca">Situação</label>
+                <select id="filtro-situacao-peca" class="form-select form-select-sm" disabled>
+                    <option>Todas as situações</option>
+                    <option>Aguardando entrega</option>
+                    <option>Recebida</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card pecas-panel" aria-labelledby="pecas-acompanhamento">
+    <div class="card-header pecas-panel__header">
+        <div>
+            <h2 id="pecas-acompanhamento" class="h5 mb-1">Peças em acompanhamento</h2>
+            <p class="text-body-secondary small mb-0">Visualize as peças vinculadas aos atendimentos da oficina.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Peça</th>
+                    <th scope="col">OS</th>
+                    <th scope="col">Veículo</th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">Situação</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var peca in PecasDemonstracao)
+                {
+                    <tr>
+                        <td class="fw-semibold" data-label="Peça">@peca.Nome</td>
+                        <td data-label="OS">@peca.OrdemServico</td>
+                        <td data-label="Veículo">@peca.Veiculo</td>
+                        <td data-label="Quantidade">@peca.Quantidade</td>
+                        <td data-label="Situação"><span class="badge @peca.ClasseBadge">@peca.Situacao</span></td>
+                        <td data-label="Ações">
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Ver</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Marcar como recebida</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="alert alert-info pecas-empty-state mt-4" role="status" hidden>
+    <strong>Nenhuma peça aguardando entrega.</strong>
+    <div class="small mt-1">As peças pendentes de recebimento aparecerão aqui.</div>
+</section>
+
+@code {
+    // Dados estáticos usados apenas para validar o wireframe da página nesta fase.
+    private static readonly (string Nome, string OrdemServico, string Veiculo, int Quantidade, string Situacao, string ClasseBadge)[] PecasDemonstracao =
+    [
+        ("Filtro de óleo", "OS-001", "Honda Civic 2020", 1, "Aguardando entrega", "text-bg-info"),
+        ("Pastilha de freio", "OS-002", "Toyota Corolla 2021", 1, "Recebida", "text-bg-success"),
+        ("Correia dentada", "OS-003", "Volkswagen T-Cross 2022", 1, "Aguardando entrega", "text-bg-info")
+    ];
+}
