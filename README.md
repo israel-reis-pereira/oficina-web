@@ -578,7 +578,7 @@ teste
 Dentro da pasta do projeto:
 
 ```powershell
-cd "C:\Users\Williarts\Downloads\teste\oficina-web"
+cd "C:\Users\Micro\Downloads\teste\oficina-web"
 ```
 
 Restaurar dependências:
