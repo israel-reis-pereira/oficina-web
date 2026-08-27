@@ -99,6 +99,6 @@ Não alterar arquitetura por iniciativa própria.
 
 Quando houver conflito entre documentação e código, registrar o conflito antes de tomar uma decisão.
 
-Preservar nomenclaturas existentes até que uma mudança seja explicitamente aprovada.
+Preservar nomenclaturas existentes até que uma mudança seja explicitamente aprovada. StatusServico existente não deve ser tratado automaticamente como modelo definitivo; mudanças de nomenclatura ou estados devem seguir a documentação consolidada e uma decisão explícita.
 
 Documentação deve refletir o projeto real.
