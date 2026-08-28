@@ -1,5 +1,7 @@
 @page "/ordens-servico"
 @using Oficina.Web.Models
+@using Oficina.Web.Services
+@inject OficinaService OficinaService
 
 <PageTitle>Ordens de Serviço | Oficina</PageTitle>
 
@@ -22,10 +24,10 @@
                 <label class="form-label small mb-1" for="filtro-status-os">Status</label>
                 <select id="filtro-status-os" class="form-select form-select-sm" disabled>
                     <option>Todos os status</option>
-                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.PecasSolicitadas)</option>
-                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.EmExecucao)</option>
-                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.AguardandoPagamento)</option>
-                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.Finalizado)</option>
+                    @foreach (var status in Enum.GetValues<StatusOrdemServico>())
+                    {
+                        <option>@ObterTextoStatus(status)</option>
+                    }
                 </select>
             </div>
         </div>
@@ -53,15 +55,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var ordem in OrdensServicoDemonstracao)
+                @foreach (var ordem in ListaOrdensServico)
                 {
                     <tr>
                         <td class="fw-semibold" data-label="OS">@ordem.Identificacao</td>
                         <td data-label="Cliente">@ordem.Cliente</td>
                         <td data-label="Veículo">@ordem.Veiculo</td>
                         <td data-label="Responsável">@ordem.Responsavel</td>
-                        <td data-label="Status"><span class="badge @StatusServicoApresentacao.ObterClasseBadge(ordem.Status)">@StatusServicoApresentacao.ObterTexto(ordem.Status)</span></td>
-                        <td class="fw-semibold" data-label="Total">@ordem.Total</td>
+                        <td data-label="Status"><span class="badge @ObterClasseBadge(ordem.Status)">@ObterTextoStatus(ordem.Status)</span></td>
+                        <td class="fw-semibold" data-label="Total">@FormatarMoeda(ordem.Total)</td>
                         <td data-label="Ações">
                             <div class="d-flex flex-wrap gap-2">
                                 <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Ver</button>
@@ -82,11 +84,33 @@
 </section>
 
 @code {
-    // Dados estáticos usados apenas para validar o wireframe da página nesta fase.
-    private static readonly (string Identificacao, string Cliente, string Veiculo, string Responsavel, StatusServico Status, string Total)[] OrdensServicoDemonstracao =
-    [
-        ("OS-001", "João da Silva", "Honda Civic 2020", "Carlos", StatusServico.EmExecucao, "R$ 1.850,00"),
-        ("OS-002", "Maria Oliveira", "Toyota Corolla 2021", "Rafael", StatusServico.AguardandoEntrada, "R$ 2.400,00"),
-        ("OS-003", "Carlos Souza", "Volkswagen T-Cross 2022", "Marcos", StatusServico.Finalizado, "R$ 920,00")
-    ];
+    private IReadOnlyList<ResumoOrdemServico> ListaOrdensServico =>
+    OficinaService.ObterOrdensServico();
+
+    private static string FormatarMoeda(decimal valor) =>
+    valor.ToString(
+        "C",
+        System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
+
+    private static string ObterTextoStatus(StatusOrdemServico status) =>
+        status switch
+        {
+            StatusOrdemServico.Aberta => "Aberta",
+            StatusOrdemServico.AguardandoPecas => "Aguardando peças",
+            StatusOrdemServico.EmExecucao => "Em execução",
+            StatusOrdemServico.Concluida => "Concluída",
+            StatusOrdemServico.Cancelada => "Cancelada",
+            _ => status.ToString()
+        };
+
+    private static string ObterClasseBadge(StatusOrdemServico status) =>
+        status switch
+        {
+            StatusOrdemServico.Aberta => "text-bg-primary",
+            StatusOrdemServico.AguardandoPecas => "text-bg-warning",
+            StatusOrdemServico.EmExecucao => "text-bg-info",
+            StatusOrdemServico.Concluida => "text-bg-success",
+            StatusOrdemServico.Cancelada => "text-bg-secondary",
+            _ => "text-bg-secondary"
+        };
 }

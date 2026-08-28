@@ -1,5 +1,8 @@
 @page "/orcamentos"
 @using Oficina.Web.Models
+@using Oficina.Web.Services
+
+@inject OficinaService OficinaService
 
 <PageTitle>Orçamentos | Oficina</PageTitle>
 
@@ -8,22 +11,38 @@
         <h1 class="mb-1">Orçamentos</h1>
         <p class="text-body-secondary mb-0">Consulte e acompanhe as propostas comerciais da oficina.</p>
     </div>
-    <button type="button" class="btn btn-primary orcamentos-primary-action" disabled>+ Novo Orçamento</button>
+    <button type="button" class="btn btn-primary orcamentos-primary-action" disabled>
+        + Novo Orçamento
+    </button>
 </section>
 
 <section class="card orcamentos-toolbar mb-4" aria-label="Pesquisa e filtro de orçamentos">
     <div class="card-body">
         <div class="row g-3">
             <div class="col-12 col-md-7">
-                <label class="form-label small mb-1" for="pesquisa-orcamentos">Pesquisar orçamentos</label>
-                <input id="pesquisa-orcamentos" class="form-control" type="search" placeholder="Pesquisar por cliente, veículo ou orçamento..." disabled />
+                <label class="form-label small mb-1" for="pesquisa-orcamentos">
+                    Pesquisar orçamentos
+                </label>
+                <input id="pesquisa-orcamentos"
+                       class="form-control"
+                       type="search"
+                       placeholder="Pesquisar por cliente, veículo ou orçamento..."
+                       disabled />
             </div>
+
             <div class="col-12 col-md-5">
-                <label class="form-label small mb-1" for="filtro-status-orcamento">Status</label>
-                <select id="filtro-status-orcamento" class="form-select form-select-sm" disabled>
+                <label class="form-label small mb-1" for="filtro-status-orcamento">
+                    Status
+                </label>
+                <select id="filtro-status-orcamento"
+                        class="form-select form-select-sm"
+                        disabled>
                     <option>Todos os status</option>
-                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.OrcamentoEmAnalise)</option>
-                    <option>@StatusServicoApresentacao.ObterTexto(StatusServico.AguardandoEntrada)</option>
+
+                    @foreach (var status in Enum.GetValues<StatusOrcamento>())
+                    {
+                        <option>@ObterTextoStatus(status)</option>
+                    }
                 </select>
             </div>
         </div>
@@ -33,10 +52,15 @@
 <section class="card orcamentos-panel" aria-labelledby="orcamentos-cadastrados">
     <div class="card-header orcamentos-panel__header">
         <div>
-            <h2 id="orcamentos-cadastrados" class="h5 mb-1">Propostas em acompanhamento</h2>
-            <p class="text-body-secondary small mb-0">Visualize valores, clientes e o estágio de cada proposta.</p>
+            <h2 id="orcamentos-cadastrados" class="h5 mb-1">
+                Propostas em acompanhamento
+            </h2>
+            <p class="text-body-secondary small mb-0">
+                Visualize valores, clientes e o estágio de cada proposta.
+            </p>
         </div>
     </div>
+
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead>
@@ -49,20 +73,46 @@
                     <th scope="col">Ações</th>
                 </tr>
             </thead>
+
             <tbody>
-                @foreach (var orcamento in OrcamentosDemonstracao)
+                @foreach (var orcamento in ListaOrcamentos)
                 {
                     <tr>
-                        <td class="fw-semibold" data-label="Orçamento">@orcamento.Identificacao</td>
-                        <td data-label="Cliente">@orcamento.Cliente</td>
-                        <td data-label="Veículo">@orcamento.Veiculo</td>
-                        <td class="fw-semibold" data-label="Valor">@orcamento.Valor</td>
-                        <td data-label="Status"><span class="badge @StatusServicoApresentacao.ObterClasseBadge(orcamento.Status)">@StatusServicoApresentacao.ObterTexto(orcamento.Status)</span></td>
+                        <td class="fw-semibold" data-label="Orçamento">
+                            @orcamento.Identificacao
+                        </td>
+                        <td data-label="Cliente">
+                            @orcamento.Cliente
+                        </td>
+                        <td data-label="Veículo">
+                            @orcamento.Veiculo
+                        </td>
+                        <td class="fw-semibold" data-label="Valor">
+                            @FormatarMoeda(orcamento.Valor)
+                        </td>
+                        <td data-label="Status">
+                            <span class="badge @ObterClasseBadge(orcamento.Status)">
+                                @ObterTextoStatus(orcamento.Status)
+                            </span>
+                        </td>
+
                         <td data-label="Ações">
                             <div class="d-flex flex-wrap gap-2">
-                                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Ver</button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Aprovar</button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>Recusar</button>
+                                <button type="button"
+                                        class="btn btn-outline-secondary btn-sm"
+                                        disabled>
+                                    Ver
+                                </button>
+                                <button type="button"
+                                        class="btn btn-outline-secondary btn-sm"
+                                        disabled>
+                                    Aprovar
+                                </button>
+                                <button type="button"
+                                        class="btn btn-outline-secondary btn-sm"
+                                        disabled>
+                                    Recusar
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -74,15 +124,38 @@
 
 <section class="alert alert-info orcamentos-empty-state mt-4" role="status" hidden>
     <strong>Nenhum orçamento pendente de aprovação.</strong>
-    <div class="small mt-1">Novos orçamentos aparecerão aqui quando houver propostas aguardando análise.</div>
+    <div class="small mt-1">
+        Novos orçamentos aparecerão aqui quando houver propostas aguardando análise.
+    </div>
 </section>
 
 @code {
-    // Dados estáticos usados apenas para validar o wireframe da página nesta fase.
-    private static readonly (string Identificacao, string Cliente, string Veiculo, string Valor, StatusServico Status)[] OrcamentosDemonstracao =
-    [
-        ("ORC-001", "João da Silva", "Honda Civic 2020", "R$ 1.850,00", StatusServico.OrcamentoEmAnalise),
-        ("ORC-002", "Maria Oliveira", "Toyota Corolla 2021", "R$ 2.400,00", StatusServico.AguardandoEntrada),
-        ("ORC-003", "Carlos Souza", "Volkswagen T-Cross 2022", "R$ 920,00", StatusServico.OrcamentoEmAnalise)
-    ];
+
+    private IReadOnlyList<ResumoOrcamento> ListaOrcamentos =>
+    OficinaService.ObterOrcamentos();
+
+    private static string FormatarMoeda(decimal valor) =>
+        valor.ToString(
+            "C",
+            System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
+
+    private static string ObterTextoStatus(StatusOrcamento status) =>
+    status switch
+    {
+        StatusOrcamento.AguardandoAprovacao => "Aguardando aprovação",
+        StatusOrcamento.Aprovado => "Aprovado",
+        StatusOrcamento.Recusado => "Recusado",
+        StatusOrcamento.Cancelado => "Cancelado",
+        _ => status.ToString()
+    };
+
+    private static string ObterClasseBadge(StatusOrcamento status) =>
+    status switch
+    {
+        StatusOrcamento.AguardandoAprovacao => "text-bg-warning",
+        StatusOrcamento.Aprovado => "text-bg-success",
+        StatusOrcamento.Recusado => "text-bg-danger",
+        StatusOrcamento.Cancelado => "text-bg-secondary",
+        _ => "text-bg-secondary"
+    };
 }

@@ -1,5 +1,7 @@
 @page "/veiculos"
 @using Oficina.Web.Models
+@using Oficina.Web.Services
+@inject OficinaService OficinaService
 
 <PageTitle>Veículos | Oficina</PageTitle>
 
@@ -37,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var veiculo in VeiculosDemonstracao)
+                @foreach (var veiculo in ListaVeiculos)
                 {
                     <tr>
                         <td class="fw-semibold" data-label="Placa">@veiculo.Placa</td>
@@ -58,11 +60,7 @@
 </section>
 
 @code {
-    // Dados estáticos usados apenas para validar o wireframe da página nesta fase.
-    private static readonly (string Placa, string Descricao, string Cliente, StatusServico Status)[] VeiculosDemonstracao =
-    [
-        ("ABC1D23", "Honda Civic 2020", "João da Silva", StatusServico.PecasSolicitadas),
-        ("DEF4G56", "Toyota Corolla 2021", "Maria Oliveira", StatusServico.AguardandoEntrada),
-        ("HIJ7K89", "Volkswagen T-Cross 2022", "Carlos Souza", StatusServico.EmExecucao)
-    ];
+
+    private IReadOnlyList<ResumoVeiculo> ListaVeiculos => OficinaService.ObterVeiculos();
+
 }

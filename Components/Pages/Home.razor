@@ -194,14 +194,14 @@
 </section>
 
 @code {
-    private IReadOnlyList<Veiculo> VeiculosEmAtendimento => OficinaService.ObterVeiculosEmAtendimento();
+    private IReadOnlyList<ResumoAtendimentoDashboard> VeiculosEmAtendimento => OficinaService.ObterVeiculosEmAtendimento();
     // O estado do filtro pertence ao componente porque representa a seleção atual do usuário nesta tela.
     private StatusServico? FiltroStatus { get; set; }
-    private IReadOnlyList<Veiculo> VeiculosEmAtendimentoFiltrados => OficinaService.ObterVeiculosEmAtendimento(FiltroStatus);
-    private IReadOnlyList<Veiculo> OrcamentosPendentes => OficinaService.ObterOrcamentosPendentes();
-    private IReadOnlyList<Veiculo> EntradasAguardandoPagamento => OficinaService.ObterEntradasAguardandoPagamento();
-    private IReadOnlyList<Veiculo> VeiculosAguardandoPecas => OficinaService.ObterVeiculosAguardandoPecas();
-    private IReadOnlyList<Veiculo> ServicosEmExecucao => OficinaService.ObterServicosEmExecucao();
+    private IReadOnlyList<ResumoAtendimentoDashboard> VeiculosEmAtendimentoFiltrados => OficinaService.ObterVeiculosEmAtendimento(FiltroStatus);
+    private IReadOnlyList<ResumoAtendimentoDashboard> OrcamentosPendentes => OficinaService.ObterOrcamentosPendentes();
+    private IReadOnlyList<ResumoAtendimentoDashboard> EntradasAguardandoPagamento => OficinaService.ObterEntradasAguardandoPagamento();
+    private IReadOnlyList<ResumoAtendimentoDashboard> VeiculosAguardandoPecas => OficinaService.ObterVeiculosAguardandoPecas();
+    private IReadOnlyList<ResumoAtendimentoDashboard> ServicosEmExecucao => OficinaService.ObterServicosEmExecucao();
     private decimal ValorTotalEntradas => OficinaService.ObterValorTotalEntradas();
 
     private static string FormatarMoeda(decimal valor) => valor.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
