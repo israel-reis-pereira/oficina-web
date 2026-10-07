@@ -1,0 +1,80 @@
+@page "/orcamento"
+@rendermode InteractiveServer
+@inject IOptions<OficinaSettings> OficinaOptions
+
+<PageTitle>Solicitar Orçamento — @OficinaOptions.Value.NomeCurto</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Solicite um orçamento para manutenção do seu veículo na @OficinaOptions.Value.NomeCurto em @OficinaOptions.Value.Cidade/@OficinaOptions.Value.Estado." />
+</HeadContent>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <h1 class="section-title mb-2">Solicitar Orçamento</h1>
+            <p class="text-muted-custom mb-4">
+                Preencha os dados abaixo e em breve você poderá enviar sua solicitação pelo WhatsApp.
+            </p>
+
+            <EditForm Model="Modelo" OnValidSubmit="EnviarFormulario" FormName="orcamento">
+                <DataAnnotationsValidator />
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome *</label>
+                    <InputText id="nome" @bind-Value="Modelo.Nome" class="form-control form-control-lg" placeholder="Seu nome completo" />
+                    <ValidationMessage For="() => Modelo.Nome" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="telefone" class="form-label">Telefone / WhatsApp *</label>
+                    <InputText id="telefone" @bind-Value="Modelo.Telefone" class="form-control form-control-lg" placeholder="(17) 99999-9999" inputmode="tel" />
+                    <ValidationMessage For="() => Modelo.Telefone" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="veiculo" class="form-label">Veículo *</label>
+                    <InputText id="veiculo" @bind-Value="Modelo.Veiculo" class="form-control form-control-lg" placeholder="Ex: Fiat Uno 2018" />
+                    <ValidationMessage For="() => Modelo.Veiculo" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="placa" class="form-label">Placa</label>
+                    <InputText id="placa" @bind-Value="Modelo.Placa" class="form-control form-control-lg" placeholder="ABC-1D23" />
+                    <ValidationMessage For="() => Modelo.Placa" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="descricao" class="form-label">Serviço ou problema *</label>
+                    <InputTextArea id="descricao" @bind-Value="Modelo.Descricao" class="form-control form-control-lg" rows="4" placeholder="Descreva o serviço desejado ou o problema do veículo" />
+                    <ValidationMessage For="() => Modelo.Descricao" />
+                </div>
+
+                @if (FormularioEnviado)
+                {
+                    <div class="alert alert-info" role="status">
+                        Integração com WhatsApp em breve. Seus dados foram validados com sucesso.
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-primary btn-lg w-100" disabled="@FormularioEnviado">
+                    Enviar solicitação
+                </button>
+            </EditForm>
+
+            <p class="text-muted-custom small text-center mt-4 mb-0">
+                Prefere falar direto?
+                <WhatsAppButton Text="Chame no WhatsApp" CssClass="btn btn-link btn-sm p-0 align-baseline" ShowIcon="false" />
+            </p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private OrcamentoFormModel Modelo { get; set; } = new();
+    private bool FormularioEnviado { get; set; }
+
+    private void EnviarFormulario()
+    {
+        FormularioEnviado = true;
+    }
+}

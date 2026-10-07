@@ -1,0 +1,38 @@
+@inject IOptions<OficinaSettings> OficinaOptions
+
+<header class="site-header sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Navegação principal">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                <img src="images/logo.svg" alt="" width="36" height="36" aria-hidden="true" />
+                <span>@OficinaOptions.Value.NomeCurto</span>
+            </a>
+
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" title="Abrir menu de navegação" aria-label="Abrir menu de navegação" />
+
+            <label for="nav-toggle" class="nav-toggle-label d-lg-none" aria-hidden="true">
+                <span class="hamburger"></span>
+            </label>
+
+            <div class="nav-collapse">
+                <ul class="navbar-nav ms-lg-auto align-items-lg-center gap-lg-2">
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Início</NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/#servicos">Serviços</NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/orcamento">Orçamento</NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/contato">Contato</NavLink>
+                    </li>
+                    <li class="nav-item nav-whatsapp">
+                        <WhatsAppButton Text="WhatsApp" CssClass="btn btn-whatsapp btn-sm" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

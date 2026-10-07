@@ -1,0 +1,27 @@
+@page "/contato"
+@inject IOptions<OficinaSettings> OficinaOptions
+
+<PageTitle>Contato — @OficinaOptions.Value.NomeCurto</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Entre em contato com a @OficinaOptions.Value.NomeCurto. Telefone, WhatsApp, endereço e localização em @OficinaOptions.Value.Cidade/@OficinaOptions.Value.Estado." />
+</HeadContent>
+
+<div class="container py-5">
+    <h1 class="section-title mb-4">Contato</h1>
+
+    <ContatoResumo Titulo="Fale conosco"
+                    ShowTelefone="true"
+                    ShowReferencia="true"
+                    ShowComoChegar="true"
+                    Expandido="true" />
+
+    <section class="py-4">
+        <h2 class="section-title mb-3">Localização</h2>
+        <MapaLocalizacao EmbedUrl="@OficinaOptions.Value.GoogleMapsEmbedUrl" />
+    </section>
+
+    <div class="text-center py-4">
+        <WhatsAppButton Text="Falar pelo WhatsApp" CssClass="btn btn-whatsapp btn-lg" />
+    </div>
+</div>

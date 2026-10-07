@@ -1,14 +1,13 @@
 using Oficina.Web.Components;
-using Oficina.Web.Services;
+using Oficina.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.Configure<OficinaSettings>(
+    builder.Configuration.GetSection(OficinaSettings.SectionName));
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
-// O DI fornece a mesma simulação em memória aos componentes durante a execução da aplicação.
-builder.Services.AddSingleton<OficinaService>();
 
 var app = builder.Build();
 

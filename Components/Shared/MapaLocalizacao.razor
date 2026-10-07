@@ -1,0 +1,15 @@
+<section class="mapa-container" aria-label="Mapa de localização">
+    <div class="ratio ratio-16x9">
+        <iframe src="@EmbedUrl"
+                title="Mapa com a localização da oficina"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen>
+        </iframe>
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public string EmbedUrl { get; set; } = string.Empty;
+}

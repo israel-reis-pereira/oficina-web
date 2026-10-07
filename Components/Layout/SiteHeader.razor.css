@@ -1,0 +1,109 @@
+.site-header {
+    background-color: var(--cor-principal);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1030;
+}
+
+.site-header .navbar-brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.site-header .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+}
+
+.site-header .nav-link:hover,
+.site-header .nav-link:focus-visible {
+    color: var(--cor-branco);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.site-header ::deep a.active {
+    color: var(--cor-branco);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-toggle {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.nav-toggle-label {
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: auto;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--cor-branco);
+    border-radius: 2px;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: "";
+    position: absolute;
+    left: 0;
+}
+
+.hamburger::before {
+    top: -7px;
+}
+
+.hamburger::after {
+    top: 7px;
+}
+
+.nav-collapse {
+    display: none;
+    width: 100%;
+}
+
+.nav-toggle:checked ~ .nav-collapse {
+    display: block;
+    padding-top: 0.75rem;
+    padding-bottom: 0.5rem;
+}
+
+.nav-whatsapp {
+    margin-top: 0.5rem;
+}
+
+@media (min-width: 992px) {
+    .nav-toggle-label {
+        display: none;
+    }
+
+    .nav-collapse {
+        display: flex !important;
+        width: auto;
+        padding: 0;
+    }
+
+    .nav-whatsapp {
+        margin-top: 0;
+        margin-left: 0.5rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .site-header .navbar {
+        flex-wrap: wrap;
+    }
+
+    .site-header .container {
+        flex-wrap: wrap;
+    }
+}

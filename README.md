@@ -1,147 +1,664 @@
+Sim. E eu manteria exatamente essa estrutura como **MVP**, porque ela atende ao objetivo de entregar algo funcional hoje sem transformar o projeto em um sistema administrativo antes da hora.
+
+Também vale separar duas coisas:
+
+1. **Aplicação pública da oficina** — o que o cliente vê.
+2. **Sistema interno** — orçamento, clientes, veículos, histórico etc. Isso pode entrar depois.
+
+Neste momento, eu não colocaria login, banco, DDD, Clean Architecture, agendamento complexo ou IA dentro do núcleo da aplicação. Primeiro fazemos a vitrine funcionar e gerar contato.
+
+### Estrutura inicial
+
+```text
+Oficina.Web
+│
+├── Página inicial
+│   ├── Nome da oficina
+│   ├── Descrição curta
+│   ├── Serviços principais
+│   ├── Horário de funcionamento
+│   ├── Endereço
+│   └── WhatsApp
+│
+├── Solicitar orçamento
+│   ├── Nome
+│   ├── Telefone/WhatsApp
+│   ├── Veículo
+│   ├── Serviço/problema
+│   └── Enviar pelo WhatsApp
+│
+└── Contato
+    ├── WhatsApp
+    ├── Telefone
+    ├── Endereço
+    └── Localização
+```
+
+Eu faria uma pequena alteração conceitual: **não precisamos necessariamente de um backend para o primeiro formulário**. O cliente pode preencher os dados e o sistema montar uma mensagem de WhatsApp. Isso elimina banco de dados, autenticação e hospedagem de API neste primeiro momento.
+
+---
+
+# Sobre usar IA para o design
+
+Sim, podemos usar IA como **ferramenta de apoio ao design**, mas eu não deixaria a IA decidir toda a arquitetura.
+
+Podemos trabalhar assim:
+
+```text
+Você
+ ↓
+Requisitos reais da oficina
+ ↓
+IA
+ ↓
+Proposta visual
+ ↓
+Nós analisamos
+ ↓
+Implementação em Blazor
+ ↓
+Teste no navegador
+ ↓
+Ajustes
+```
+
+A IA pode ajudar bastante com:
+
+* hierarquia visual;
+* composição da página;
+* escolha de componentes;
+* responsividade;
+* UX;
+* textos;
+* estrutura de cores;
+* ideias de layout;
+* CSS.
+
+Mas a implementação final precisa continuar sendo nossa, porque você está usando esse projeto também para **aprender Blazor/.NET**.
+
+# Requisitos do Sistema e Design — MVP
+
+## Objetivo
+
+A primeira versão do sistema deverá funcionar como uma aplicação web simples para uma única oficina mecânica.
+
+A prioridade é:
+
+1. simplicidade;
+2. velocidade;
+3. utilização em dispositivos móveis;
+4. contato rápido com a oficina;
+5. solicitação de orçamento;
+6. localização da oficina.
+
+O MVP não terá inicialmente funcionalidades administrativas complexas.
+
+---
+
+## Identidade Visual
+
+### Azul escuro
+
+Cor principal da aplicação.
+
+Sugestões:
+
+- `#0F2027`
+- `#1E3A8A`
+
+Utilização:
+
+- cabeçalho;
+- seções principais;
+- títulos;
+- elementos estruturais;
+- identidade visual.
+
+### Amarelo / Âmbar
+
+Cor de destaque.
+
+Sugestões:
+
+- `#FBBF24`
+- `#F59E0B`
+
+Utilização:
+
+- chamadas para ação;
+- botões principais;
+- indicadores importantes;
+- elementos de destaque.
+
+### Fundo
+
+Cor de fundo principal:
+
+```text
+#F9FAFB
+
+---
+
+# Antes de mexermos no código: documentar o estado atual
+
+Seu Git está em uma situação muito boa.
+
+Você tem:
+
+```text
+7a9d885
+chore: inicializa projeto Blazor
+
+        ↓
+
+3434b1c
+feat: cria página inicial da oficina
+```
+
+E o último `git push` foi concluído corretamente.
+
+Isso significa que já temos um ponto de recuperação.
+
+Agora eu faria o README antes de começar a alterar a interface novamente.
+
+O README deve funcionar como o **documento de contexto do projeto**. Se amanhã você abrir uma nova conversa comigo, usar outra IA ou até voltar ao projeto daqui a alguns meses, ele explica de onde partimos.
+
+Eu colocaria algo próximo disto:
+
+````markdown
 # Oficina.Web
 
-Sistema web para gerenciamento do fluxo operacional de uma oficina mecânica.
+Aplicação web para uma oficina mecânica, desenvolvida inicialmente como um projeto simples, funcional e de fácil utilização para clientes.
 
-O projeto está sendo desenvolvido de forma incremental. O objetivo imediato é validar a experiência visual e o fluxo de trabalho antes de implementar o domínio completo, as regras de negócio e a persistência.
+O projeto está sendo desenvolvido com foco em um MVP (Minimum Viable Product), priorizando uma interface clara, responsiva e objetiva.
 
-## Estado atual
+O objetivo inicial é colocar uma versão funcional no ar rapidamente e, posteriormente, evoluir o sistema gradualmente conforme as necessidades reais da oficina.
 
-O projeto está em estágio de **MVP visual parcialmente implementado**.
+---
 
-### Implementado
+## Objetivo do Projeto
 
-- aplicação Blazor Web App em .NET 10;
-- ASP.NET Core e C#;
-- Blazor Interactive Server nas áreas interativas;
-- layout administrativo;
-- navegação principal;
-- Dashboard;
-- `OficinaService` utilizado pelo Dashboard;
-- modelo `Veiculo`;
-- enum `StatusServico`, usado atualmente pela interface;
-- páginas visuais dos módulos principais.
+Criar uma aplicação web para uma única oficina mecânica que permita ao cliente:
 
-### Parcialmente implementado
+- conhecer a oficina;
+- visualizar os principais serviços;
+- consultar horário de funcionamento;
+- consultar endereço;
+- entrar em contato pelo WhatsApp;
+- solicitar um orçamento;
+- informar dados básicos do veículo e do problema.
 
-- Dashboard com indicadores, filtros e dados simulados em memória;
-- separação inicial entre páginas, modelo, serviço e dados;
-- fluxo operacional representado visualmente.
+A prioridade é oferecer uma experiência simples e rápida, especialmente em dispositivos móveis.
 
-### Apenas interface ou wireframe
+---
 
-As páginas de Clientes, Veículos, Orçamentos, Ordens de Serviço, Peças, Financeiro e Configurações possuem rotas, tabelas e controles visuais. Elas ainda usam dados demonstrativos e não oferecem CRUD ou operações reais.
+## Estado Atual
 
-### Ainda não implementado
+O projeto encontra-se em fase inicial de desenvolvimento.
 
-- CRUD real;
-- entidades completas de Cliente, Atendimento, Orçamento, Ordem de Serviço, Peças e Financeiro;
-- regras reais de aprovação;
-- regra operacional de entrada de 50%;
-- solicitação e recebimento real de peças;
-- pagamentos e finalização reais;
-- persistência, `DbContext`, Entity Framework Core, Npgsql e PostgreSQL.
+A estrutura base da aplicação Blazor foi criada e está funcionando localmente.
 
-## Stack atual
+A página inicial padrão do template foi substituída por uma primeira versão específica para a oficina.
 
-- .NET 10;
-- ASP.NET Core;
-- Blazor Web App;
-- Razor Components;
-- Blazor Interactive Server;
-- C#;
-- Bootstrap;
-- HTML5 e CSS3;
-- Git e GitHub como ferramentas de versionamento e colaboração.
+Estado atual:
 
-## Arquitetura
+- [x] Projeto Blazor criado
+- [x] Projeto configurado com .NET 10
+- [x] Aplicação executando localmente
+- [x] Repositório Git criado
+- [x] Repositório GitHub configurado
+- [x] Primeiro commit realizado
+- [x] Primeiro push para o GitHub realizado
+- [x] Página inicial personalizada
+- [ ] Estrutura visual definitiva
+- [ ] Seção de serviços
+- [ ] Informações de horário
+- [ ] Informações de endereço
+- [ ] Integração com WhatsApp
+- [ ] Página de solicitação de orçamento
+- [ ] Página de contato
+- [ ] Responsividade revisada
+- [ ] SEO básico
+- [ ] Publicação em produção
 
-A aplicação mantém inicialmente uma arquitetura de **monólito modular**, com separação de responsabilidades e evolução incremental.
+---
 
-O fluxo técnico atual pode ser resumido como:
+## Tecnologias
 
-```text
-Página Razor
-    ↓
-OficinaService, quando aplicável
-    ↓
-Dados simulados em memória
-```
+### Backend / Runtime
 
-Serviços devem ser extraídos conforme existam regras ou consultas que justifiquem essa responsabilidade. Clean Code é uma diretriz de organização, não uma camada ou tecnologia adicional.
+- .NET 10
+- ASP.NET Core
+- C#
 
-## Modelo funcional
+### Frontend
 
-O modelo conceitual oficial está documentado em [docs/mapa-minimo-consolidado.md](docs/mapa-minimo-consolidado.md).
+- Blazor
+- Razor Components
+- HTML
+- CSS
+- Bootstrap
 
-```text
-Cliente
-└── Veículo
-    └── Atendimento
-        ├── Orçamentos
-        │   └── Itens do orçamento
-        ├── Ordem de Serviço
-        │   └── Solicitações de peças
-        └── Lançamentos financeiros
-```
+### Ferramentas
 
-O Atendimento representa uma passagem ou caso específico de um veículo pela oficina. Cliente, Atendimento, Orçamento, Ordem de Serviço, Peças e Financeiro são conceitos do domínio e não devem ser considerados implementados apenas porque existem páginas correspondentes.
+- Visual Studio Community 2026
+- PowerShell
+- Git
+- GitHub
 
-O fluxo funcional definido é:
+---
+
+## Arquitetura Atual
+
+O projeto utiliza o modelo padrão de aplicação web Blazor criado pelo template do .NET.
+
+Estrutura inicial:
 
 ```text
-Cliente
-↓
-Veículo
-↓
-Atendimento
-↓
-Orçamento
-↓
-Aprovação
-↓
-Entrada de 50%
-↓
-Solicitação de peças
-↓
-Execução do serviço
-↓
-Pagamento
-↓
-Finalização e entrega
+Oficina.Web/
+│
+├── Components/
+│   ├── Layout/
+│   │   ├── MainLayout.razor
+│   │   ├── MainLayout.razor.css
+│   │   ├── NavMenu.razor
+│   │   ├── NavMenu.razor.css
+│   │   ├── ReconnectModal.razor
+│   │   ├── ReconnectModal.razor.css
+│   │   └── ReconnectModal.razor.js
+│   │
+│   ├── Pages/
+│   │   ├── Counter.razor
+│   │   ├── Error.razor
+│   │   ├── Home.razor
+│   │   ├── NotFound.razor
+│   │   └── Weather.razor
+│   │
+│   ├── App.razor
+│   ├── Routes.razor
+│   └── _Imports.razor
+│
+├── Properties/
+│   └── launchSettings.json
+│
+├── wwwroot/
+│
+├── Oficina.Web.csproj
+├── Program.cs
+├── appsettings.json
+└── appsettings.Development.json
+````
+
+---
+
+## Configuração Atual
+
+O projeto utiliza:
+
+```xml
+<TargetFramework>net10.0</TargetFramework>
 ```
 
-Entrada e pagamentos pertencem à dimensão financeira do Atendimento. Não são, na arquitetura conceitual, simples estados operacionais do atendimento.
+E está configurado como aplicação web:
 
-O `StatusServico` atual é uma implementação provisória utilizada pela interface. Ele não representa o modelo definitivo de estados do domínio. A futura implementação deverá separar as diferentes dimensões de estado conforme as regras reais forem definidas.
+```xml
+<Project Sdk="Microsoft.NET.Sdk.Web">
+```
 
-## Evolução planejada
+O projeto utiliza Razor Components com renderização interativa no servidor.
 
-1. consolidar modelos de Cliente, Veículo, Atendimento, Orçamento, itens, Ordem de Serviço, peças e lançamentos financeiros;
-2. implementar cadastros e operações reais;
-3. implementar aprovação, entrada, peças, execução, pagamentos e finalização;
-4. adicionar persistência com Entity Framework Core, Npgsql e PostgreSQL;
-5. ampliar o Dashboard para dados reais;
-6. adicionar validações, testes e tratamento de erros.
+Configuração atual em `Program.cs`:
 
-Radzen poderá ser avaliado se Bootstrap deixar de atender uma necessidade concreta. Web API, Blazor WebAssembly, DDD formal, camadas formais, Repository Pattern, CQRS, MediatR, Unit of Work e Docker não são requisitos do MVP nem etapas obrigatórias.
+```csharp
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+```
 
-## Documentação
+E:
 
-- [Mapa funcional consolidado](docs/mapa-minimo-consolidado.md): referência atual do modelo funcional e do estado de implementação;
-- [Stack recomendada](docs/stack-recomendada.md): decisões e possibilidades relacionadas à stack;
-- [Planejamento recomendado](docs/planejamento-recomendado-oficina.md): documento histórico de planejamento;
-- [Planejamento recomendado versão 2](docs/planejamento-recomendado-oficina-vs2.md): revisão histórica do planejamento.
+```csharp
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
+```
 
-Os documentos de planejamento permanecem como histórico. Quando houver conflito, o código atual e esta documentação consolidada devem ser consultados antes deles.
+---
 
-## Execução local
+## Execução Local
 
-Dentro da pasta do projeto:
+Para executar o projeto:
 
 ```powershell
-dotnet restore
-dotnet build
+cd C:\Users\Micro\Documents\Projetos\Oficina.Web
 dotnet run
 ```
 
-O endereço local será informado pelo .NET CLI.
+A aplicação atualmente é executada localmente pelo ASP.NET Core.
+
+---
+
+## Git
+
+O projeto utiliza Git para versionamento.
+
+Branch principal:
+
+```text
+main
+```
+
+Repositório:
+
+[https://github.com/israel-reis-pereira/oficina-web](https://github.com/israel-reis-pereira/oficina-web)
+
+Primeiro commit:
+
+```text
+chore: inicializa projeto Blazor
+```
+
+Segundo commit:
+
+```text
+feat: cria página inicial da oficina
+```
+
+---
+
+## Estrutura Funcional Planejada
+
+A primeira versão da aplicação deverá possuir:
+
+### Página inicial
+
+Responsável por apresentar rapidamente a oficina.
+
+Conteúdo planejado:
+
+* nome da oficina;
+* descrição;
+* principais serviços;
+* horário de funcionamento;
+* endereço;
+* botão de WhatsApp.
+
+### Solicitar orçamento
+
+Página ou seção destinada ao envio de uma solicitação de orçamento.
+
+Campos planejados:
+
+* nome;
+* telefone/WhatsApp;
+* veículo;
+* serviço ou problema;
+* mensagem.
+
+Inicialmente, o envio poderá ser realizado através do WhatsApp, evitando a necessidade de backend, banco de dados ou sistema de autenticação.
+
+### Contato
+
+Página ou seção contendo:
+
+* WhatsApp;
+* telefone;
+* endereço;
+* localização.
+
+---
+
+## Princípios do MVP
+
+O primeiro objetivo não é criar um sistema completo de gestão de oficina.
+
+A prioridade é:
+
+1. funcionar;
+2. ser simples;
+3. ser rápido;
+4. funcionar bem em celulares;
+5. facilitar o contato com a oficina;
+6. ser fácil de manter;
+7. ser publicado rapidamente.
+
+Funcionalidades administrativas serão avaliadas posteriormente conforme a necessidade real da oficina.
+
+---
+
+## Funcionalidades Futuras
+
+Possíveis evoluções:
+
+* cadastro de clientes;
+* cadastro de veículos;
+* histórico de manutenção;
+* sistema de orçamentos;
+* painel administrativo;
+* agenda de serviços;
+* banco de dados;
+* autenticação;
+* notificações;
+* upload de imagens;
+* relatórios;
+* integração com outros serviços.
+
+Essas funcionalidades não fazem parte do MVP inicial.
+
+---
+
+## Banco de Dados
+
+O MVP inicial não necessita obrigatoriamente de banco de dados.
+
+A utilização de banco será avaliada quando surgirem necessidades como:
+
+* persistência de clientes;
+* histórico de veículos;
+* armazenamento de orçamentos;
+* agenda;
+* painel administrativo.
+
+---
+
+## Design
+
+A interface deverá seguir os seguintes princípios:
+
+* simplicidade;
+* leitura rápida;
+* poucos elementos por tela;
+* boa hierarquia visual;
+* botões de ação evidentes;
+* prioridade para dispositivos móveis;
+* contraste adequado;
+* navegação simples.
+
+A interface será desenvolvida pensando principalmente no cliente que procura rapidamente uma oficina pelo celular.
+
+---
+
+## Estratégia de Desenvolvimento
+
+O desenvolvimento será incremental.
+
+Fluxo:
+
+```text
+Requisito
+    ↓
+Implementação
+    ↓
+Teste local
+    ↓
+Revisão
+    ↓
+Commit
+    ↓
+Push
+    ↓
+Próxima funcionalidade
+```
+
+Cada etapa importante deverá ser versionada individualmente no Git.
+
+---
+
+## Estratégia de Hospedagem
+
+A prioridade é utilizar recursos gratuitos sempre que forem suficientes para o projeto.
+
+A solução de hospedagem deverá ser avaliada considerando:
+
+* custo;
+* disponibilidade;
+* HTTPS;
+* domínio;
+* facilidade de manutenção;
+* compatibilidade com ASP.NET Core;
+* limites do plano gratuito;
+* possibilidade de crescimento.
+
+Caso o cliente não queira pagar hospedagem, deverão ser avaliadas alternativas gratuitas antes da contratação de qualquer serviço.
+
+---
+
+## Estado do Projeto
+
+Projeto em desenvolvimento.
+
+Objetivo imediato:
+
+> Criar e publicar uma primeira versão funcional da aplicação da oficina.
+
+Objetivo de médio prazo:
+
+> Evoluir o MVP conforme as necessidades reais da oficina, utilizando o projeto também como estudo prático de desenvolvimento de aplicações web com .NET e Blazor.
+
+````
+
+## Um ponto importante sobre esse README
+
+Eu **não colocaria DDD, Clean Code, PostgreSQL/SQL Server, Radzen, Taiga etc. como tecnologias efetivamente utilizadas ainda**.
+
+Por exemplo, neste momento o README não deveria dizer:
+
+```text
+Banco de dados: PostgreSQL
+DDD: sim
+Clean Architecture: sim
+Radzen: sim
+````
+
+porque isso seria documentação de uma arquitetura que **ainda não existe**.
+
+Podemos colocar isso como decisão futura:
+
+```text
+Possíveis tecnologias futuras
+```
+
+Isso é importante porque documentação boa deve representar o **estado real do software**, não a intenção.
+
+---
+
+# E agora: não vamos instalar mais nada
+
+Pelo que você mostrou anteriormente, a base já está pronta:
+
+```text
+.NET SDK 10.0.302       OK
+Visual Studio 2026      OK
+ASP.NET Core            OK
+Blazor                  OK
+Git                     OK
+GitHub                  OK
+Projeto compilando      OK
+Projeto executando      OK
+Versionamento           OK
+```
+
+Portanto, **não há motivo para adicionar mais ferramentas agora**.
+
+Principalmente não instalar:
+
+* SQL Server;
+* PostgreSQL;
+* Docker;
+* Radzen;
+* Entity Framework;
+* bibliotecas de UI adicionais.
+
+Ainda não precisamos deles para entregar o MVP.
+
+---
+
+# Próximo passo
+
+Eu seguiria nesta ordem:
+
+```text
+1. README
+   ↓
+2. Limpar template padrão
+   ↓
+3. Definir identidade visual
+   ↓
+4. Criar layout principal
+   ↓
+5. Criar Home
+   ↓
+6. Criar Serviços
+   ↓
+7. Criar Contato
+   ↓
+8. Criar Solicitar Orçamento
+   ↓
+9. Integrar WhatsApp
+   ↓
+10. Testar celular
+   ↓
+11. Revisar SEO
+   ↓
+12. Build de produção
+   ↓
+13. Escolher hospedagem
+   ↓
+14. Publicar
+```
+
+E aí sim teremos a primeira versão realmente entregável.
+
+### Sobre o seu `git status`
+
+O estado que você mostrou antes do commit estava:
+
+```text
+modified: Components/Pages/Home.razor
+```
+
+Você fez corretamente:
+
+```powershell
+git add Components/Pages/Home.razor
+git commit -m "feat: cria página inicial da oficina"
+git push
+```
+
+E o resultado:
+
+```text
+7a9d885..3434b1c main -> main
+```
+
+confirma que a alteração foi enviada ao GitHub.
+
+**Eu não faria outro commit agora apenas para o README se ainda vamos definir o conteúdo dele.** Podemos montar o README definitivo primeiro e então fazer um único commit documental, por exemplo:
+
+```powershell
+git add README.md
+git commit -m "docs: documenta estado inicial do projeto"
+git push
+```
+
+Depois disso começamos a interface.
+
+E sim: **podemos trabalhar o design com IA**, mas eu sugiro que primeiro façamos uma pequena especificação visual da oficina — nome, serviços reais, telefone/WhatsApp, endereço, horário e identidade que o mecânico deseja. A partir disso conseguimos desenhar uma Home que tenha sentido comercial, em vez de simplesmente produzir uma tela bonita genérica.

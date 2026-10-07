@@ -1,0 +1,34 @@
+<section id="servicos" class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-4">Nossos Serviços</h2>
+        <p class="text-muted-custom text-center mb-5 mx-auto" style="max-width: 600px;">
+            Serviços completos para manter seu veículo seguro e em pleno funcionamento.
+        </p>
+        <div class="row g-4">
+            @foreach (var servico in Servicos)
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <article class="card card-servico h-100 p-4">
+                        <div class="d-flex align-items-start gap-3">
+                            <img src="images/icons/@(servico.Icone).svg"
+                                 alt=""
+                                 class="icone-servico flex-shrink-0"
+                                 width="48"
+                                 height="48"
+                                 aria-hidden="true" />
+                            <div>
+                                <h3 class="h5 mb-2">@servico.Nome</h3>
+                                <p class="text-muted-custom small mb-0">@servico.Descricao</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<ServicoItem> Servicos { get; set; } = [];
+}
